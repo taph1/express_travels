@@ -2,7 +2,7 @@
   "name": "express_travels",
   "version": "0.0.1",
   "description": "Agencia de viajes con Express",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "node --watch ./src/index.js",
