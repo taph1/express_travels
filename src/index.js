@@ -1,0 +1,87 @@
+// Importar los módulos
+const path = require('node:path');
+const fs = require('node:fs');
+const crypto = require('node:crypto')
+const methodOverride = require('method-override') // Para el PUT
+const express = require('express');
+const app = express();
+
+const morgan = require('morgan');
+
+// Recuperar el valor del puerto de conexión
+require('dotenv').config()
+const PORT = process.env.PORT || 3000;
+// console.log(PORT)
+
+// Cargar los datos
+const datos = require('../data/travels.json');
+const arrayDestinos = []
+datos.forEach(destino => {
+    arrayDestinos.push(destino.lugar)
+})
+// console.log(arrayDestinos)
+
+// Configuración de la plantilla
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+// Middlewares
+app.use(morgan('dev'))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(methodOverride('_method')) // Para poder utilizar el método PUT
+
+// Indicar la carpeta con recursos estáticos
+app.use(express.static(path.join(__dirname, '../public')));
+
+
+// Rutas
+datos.forEach(destino => {
+    app.get(`${destino.ruta}`, (req, res) => {
+        res.render("index", { h2: `${destino.nombre}`, img: `${destino.img}`, descripcion: `${destino.descripcion}`, precio: `${destino.precio}`, destinos: datos })
+    })
+})
+
+app.get('/admin', (req, res) => {
+    // res.sendFile('admin.html', { root: path.join(__dirname, '../public') })
+    res.render('admin', {datos});
+
+})
+
+app.post('/insert', (req, res) => {
+    const destino = req.body
+    // destino.id = Date.now().toLocaleString()
+    destino.id = crypto.randomUUID()
+    datos.push(destino)
+    fs.writeFileSync( path.join( __dirname, '../data/travels.json'), JSON.stringify(datos, null, 2), (err, data) => { 
+        if (err) console.log(err)
+        });
+    res.redirect("/admin")
+})
+
+app.delete("/eliminar/:id", (req, res) => {
+    const id = req.params.id
+    // console.log("id = ", id);
+    let newData = datos.filter(destino => destino.id !== id )
+    // console.log(newData);
+    fs.writeFileSync( path.join( __dirname, '../data/travels.json'), JSON.stringify(newData, null, 2), (err) => { 
+        if (err) res.json({"mensaje": "Problema con el borrado"})
+        });
+        res.json({"mensaje": "Elemento borrado correctamente"})
+})
+
+app.put("/actualizar/:id", (req, res) => {
+    const id = req.params.id;
+    // console.log(req.body);
+    const indexDestino = datos.findIndex(destino => destino.id === id)
+    if (indexDestino !== -1) {
+        datos[indexDestino] = { ...datos, ...req.body} // Actualiza los datos
+        fs.writeFileSync( path.join( __dirname, '../data/travels.json'), JSON.stringify(datos, null, 2), (err) => { 
+            if (err) res.json({"mensaje": "Problema con la actualización"})
+            });
+            res.json({"mensaje": "Elemento actualizado correctamente"})
+    }
+    res.json({"mensaje": "Elemento no encontrado"})
+})
+
+app.listen(PORT, () => { console.log(`Servidor en http://localhost:${PORT}`) });

@@ -1,0 +1,169 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+
+}
+ h1, h2 {
+    text-align: center;
+    /* margin: 2rem; */
+ }
+
+ header, main {
+    margin: 2rem auto;
+    width: 90%;
+
+ }
+
+ main {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+ }
+ 
+ section {
+    margin-bottom: 2rem;
+ }
+
+ form {
+    border: 2px solid steelblue;
+    border-radius: 1rem;
+    padding: 2rem;
+
+    div {
+        margin: 1rem 0;
+    }
+
+    label {
+        display: block;
+        
+    }
+
+    input {
+        width: 100%;
+        padding: .5rem 1rem;
+    }
+
+    .form_buttons {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        gap: 2rem;
+
+        button {
+            padding: .5rem 1rem;
+            border-radius: .5rem;
+        }
+
+    }
+ }
+
+ table {
+    margin: 2rem 0;
+    width : 100%;
+
+    tr {
+        height: 2rem;
+
+        &:nth-child(even) {
+            background-color: rgb(106, 90, 205, .3);
+        }
+    }
+
+  
+
+    th {
+        font-weight: 800;
+    }
+
+    td {
+        text-align: center;
+    }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+    
+    header, main {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        height: auto;
+        padding: 1rem 0;
+    }
+    
+    header, main {
+        width: 95%;
+        margin: 1rem auto;
+    }
+    
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+    
+    form {
+        padding: 1.5rem;
+    }
+    
+    .form_buttons {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    table {
+        font-size: 0.85rem;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table th,
+    table td {
+        padding: 0.5rem;
+        min-width: 100px;
+    }
+    
+    table th:first-child,
+    table td:first-child {
+        min-width: 80px;
+    }
+    
+    table th:last-child,
+    table td:last-child {
+        min-width: 60px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1, h2 {
+        font-size: 1.2rem;
+    }
+    
+    form {
+        padding: 1rem;
+    }
+    
+    input {
+        padding: 0.4rem 0.8rem;
+    }
+    
+    button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
